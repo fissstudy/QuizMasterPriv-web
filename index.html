@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#111827"><title>QuizMaster</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#"><span class="brand-icon">Q</span> QuizMaster</a>
+    <div class="user-area"><span id="userLabel">Belum masuk</span><button id="authBtn" class="btn btn-small">Masuk</button></div>
+  </header>
+  <main class="container">
+    <section id="authPanel" class="panel auth-panel">
+      <div><p class="eyebrow">PERSONAL LEARNING SPACE</p><h1>Belajar lebih seru.<br><span>Uji kemampuanmu.</span></h1>
+      <p class="muted">Buat kuis sendiri, kerjakan latihan, dan pantau perkembangan nilaimu.</p></div>
+      <form id="authForm" class="auth-form">
+        <h2 id="authTitle">Masuk ke akun</h2>
+        <label>Email<input id="email" type="email" placeholder="nama@email.com" required autocomplete="email"></label>
+        <label>Password<input id="password" type="password" placeholder="Minimal 6 karakter" minlength="6" required autocomplete="current-password"></label>
+        <button class="btn btn-primary" id="authSubmit">Masuk</button>
+        <button type="button" class="text-btn" id="authToggle">Belum punya akun? Daftar</button>
+        <p class="tiny muted">Akun dan data kuis disimpan online melalui Firebase.</p>
+      </form>
+    </section>
+
+    <section id="appPanel" hidden>
+      <div class="welcome-row"><div><p class="eyebrow">DASHBOARD</p><h1>Hai, <span id="welcomeName">Pelajar</span> 👋</h1><p class="muted">Siap menguji kemampuan hari ini?</p></div><div class="avatar">QM</div></div>
+      <div class="stats">
+        <article class="stat"><span>Total kuis selesai</span><strong id="statCount">0</strong></article>
+        <article class="stat"><span>Rata-rata nilai</span><strong id="statAverage">0</strong></article>
+        <article class="stat"><span>Nilai terbaik</span><strong id="statBest">0</strong></article>
+      </div>
+      <div class="section-head"><div><p class="eyebrow">RUANG BELAJAR</p><h2>Kuis kamu</h2></div><button id="createBtn" class="btn btn-primary">＋ Buat kuis</button></div>
+      <div id="quizList" class="quiz-grid"><div class="empty">Memuat kuis...</div></div>
+
+      <section class="panel history-panel">
+        <div class="section-head"><div><p class="eyebrow">PERKEMBANGAN</p><h2>Riwayat pengerjaan</h2></div></div>
+        <div id="historyList" class="history-list"><p class="muted">Belum ada riwayat.</p></div>
+      </section>
+      <section class="panel leaderboard-panel">
+        <div class="section-head"><div><p class="eyebrow">MOTIVASI</p><h2>Papan peringkat</h2></div></div>
+        <div id="leaderboard"><p class="muted">Belum ada hasil kuis.</p></div>
+      </section>
+    </section>
+  </main>
+
+  <dialog id="editorDialog" class="modal">
+    <form id="editorForm" class="modal-content">
+      <div class="modal-head"><div><p class="eyebrow">BUAT LATIHAN</p><h2>Kuis baru</h2></div><button type="button" class="icon-btn" data-close="editorDialog">✕</button></div>
+      <label>Judul kuis<input id="quizTitle" required maxlength="80" placeholder="Contoh: Kuis Akuntansi"></label>
+      <label>Mata pelajaran<input id="quizSubject" required maxlength="50" placeholder="Contoh: Akuntansi"></label>
+      <label>Durasi (menit)<input id="quizDuration" type="number" min="1" max="180" value="20" required></label>
+      <label>Pengaturan soal<select id="quizRandom"><option value="yes">Acak soal dan pilihan jawaban</option><option value="no">Urutan tetap</option></select></label>
+      <div class="question-editor-head"><h3>Daftar soal</h3><button type="button" id="addQuestion" class="btn btn-soft btn-small">＋ Tambah soal</button></div>
+      <div id="questionEditor"></div>
+      <div class="modal-actions"><button type="button" class="btn btn-soft" data-close="editorDialog">Batal</button><button class="btn btn-primary">Simpan kuis</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="takeDialog" class="modal">
+    <div class="modal-content">
+      <div class="modal-head"><div><p class="eyebrow" id="takeSubject">LATIHAN</p><h2 id="takeTitle">Kuis</h2></div><button class="icon-btn" data-close="takeDialog">✕</button></div>
+      <div class="quiz-meta"><span id="questionCounter">Soal 1/1</span><span class="timer" id="timer">20:00</span></div>
+      <div class="progress"><span id="progressBar"></span></div>
+      <div id="questionArea"></div>
+      <div class="question-nav"><button id="prevQuestion" class="btn btn-soft">Sebelumnya</button><button id="nextQuestion" class="btn btn-primary">Berikutnya</button></div>
+      <div class="number-nav" id="numberNav"></div>
+      <button id="finishQuiz" class="btn btn-danger btn-wide">Selesaikan kuis</button>
+    </div>
+  </dialog>
+
+  <dialog id="resultDialog" class="modal">
+    <div class="modal-content">
+      <div class="modal-head"><div><p class="eyebrow">HASIL PENGERJAAN</p><h2>Kuis selesai!</h2></div><button class="icon-btn" data-close="resultDialog">✕</button></div>
+      <div class="result-score"><strong id="resultScore">0</strong><span>Nilai kamu</span></div>
+      <p id="resultSummary" class="muted center"></p>
+      <div id="answerReview" class="review-list"></div>
+      <button class="btn btn-primary btn-wide" data-close="resultDialog">Kembali ke dashboard</button>
+    </div>
+  </dialog>
+  <div id="toast" class="toast" role="status"></div>
+  <footer>QuizMaster <span>•</span> Ruang latihan pribadimu</footer>
+  <script type="module" src="app.js"></script>
+</body></html>
